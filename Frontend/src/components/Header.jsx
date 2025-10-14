@@ -4,18 +4,18 @@ import React, { useEffect, useState, useRef } from 'react';
 import { AiOutlineSearch, AiOutlineClose, AiOutlineBell, AiOutlineUser } from 'react-icons/ai';
 import { FaMoon, FaSun, FaBars, FaRegCompass, FaFire } from 'react-icons/fa';
 import { HiLogout, HiViewGrid, HiChevronDown, HiPlus } from "react-icons/hi";
-// import { useSelector, useDispatch } from 'react-redux';
-// import { toggleTheme } from '../radux/theme/themeSlice.js';
-// import { signoutSuccess } from '../radux/user/userSlice.js';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleTheme } from '../redux/theme/themeSlice.js';
+import { signoutSuccess } from '../redux/user/userSlice.js';
 // import toast from 'react-hot-toast';
 
 export default function Header() {
   const path = useLocation().pathname;
   const location = useLocation();
   const navigate = useNavigate();
-//   const { currentUser } = useSelector(state => state.user);
-//   const { theme } = useSelector(state => state.theme);
-//   const dispatch = useDispatch();
+  const { currentUser } = useSelector(state => state.user);
+  const { theme } = useSelector(state => state.theme);
+  const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
@@ -46,32 +46,32 @@ export default function Header() {
     setIsCategoriesOpen(false);
   }, [path]);
 
-//   const handleSignout = async () => {
-//     try {
-//       const res = await fetch('/api/user/signout', {
-//         method: 'POST',
-//       });
+  const handleSignout = async () => {
+    try {
+      const res = await fetch('/api/user/signout', {
+        method: 'POST',
+      });
 
-//       if (!res.ok) {
-//         toast.error('Failed to sign out. Please try again.');
-//       } else {
-//         dispatch(signoutSuccess());
-//         toast.success('Signed out successfully!');
-//         navigate('/sign-in');
-//       }
-//     } catch (error) {
-//       toast.error('An error occurred during sign-out. Please try again.');
-//     }
-//   };
+      if (!res.ok) {
+        toast.error('Failed to sign out. Please try again.');
+      } else {
+        dispatch(signoutSuccess());
+        toast.success('Signed out successfully!');
+        navigate('/sign-in');
+      }
+    } catch (error) {
+      toast.error('An error occurred during sign-out. Please try again.');
+    }
+  };
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     const urlParams = new URLSearchParams(location.search);
-//     urlParams.set('searchTerm', searchTerm);
-//     const searchQuery = urlParams.toString();
-//     navigate(`/search?${searchQuery}`);
-//     setIsSearchVisible(false);
-//   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('searchTerm', searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+    setIsSearchVisible(false);
+  };
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
@@ -124,7 +124,7 @@ export default function Header() {
             pill 
             onClick={() => dispatch(toggleTheme())}
           >
-            {/* {theme === 'light' ? <FaSun className="text-sm" /> : <FaMoon className="text-sm" />} */}
+            {theme === 'light' ? <FaSun className="text-sm" /> : <FaMoon className="text-sm" />}
           </Button>
           
           <Button 
@@ -137,8 +137,7 @@ export default function Header() {
           </Button>
           
           {/* Mobile Profile/Hamburger Menu */}
-          {/* currentUser */}
-          {false && (
+          {currentUser && (
             <Dropdown 
               arrowIcon={false} 
               inline 
@@ -209,8 +208,7 @@ export default function Header() {
       </div>
 
       {/* Search Form - Desktop */}
-      {/* onSubmit={handleSubmit} */}
-      <form  className="hidden md:flex flex-1 max-w-2xl mx-8">
+      <form onSubmit={handleSubmit} className="hidden md:flex flex-1 max-w-2xl mx-8">
         <TextInput 
           type='text' 
           placeholder='Search articles, topics, or authors...' 
@@ -243,29 +241,9 @@ export default function Header() {
       {/* Right Side Controls */}
       <div className="flex items-center gap-3 md:order-2">
         {/* Create Post Button - Desktop */}
-        {false && (
-          <Button
-            gradientDuoTone="purpleToBlue"
-            pill
-            onClick={handleCreatePost}
-            className="hidden md:flex items-center gap-2 transition-all hover:scale-105"
-          >
-            <HiPlus className="text-sm" />
-            <span>Write</span>
-          </Button>
-        )}
+        
 
-        {/* Notifications - Desktop */}
-        {false && (
-          <Link to="/notifications" className="hidden md:block relative">
-            <Button color="gray" pill className="w-10 h-10 transition-all hover:scale-105">
-              <AiOutlineBell className="text-lg" />
-            </Button>
-            {hasNotifications && (
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-gray-900"></span>
-            )}
-          </Link>
-        )}
+        
 
         {/* Theme Toggle - Desktop */}
         <Button
@@ -277,12 +255,11 @@ export default function Header() {
             toast.success(`Theme switched to ${theme === 'light' ? 'dark' : 'light'}.`);
           }}
         >
-            {/* theme */}
-          {false === 'light' ? <FaSun /> : <FaMoon />}
+          {theme === 'light' ? <FaSun /> : <FaMoon />}
         </Button>
 
         {/* User Dropdown - Desktop */}
-        {false ? (
+        {currentUser ? (
           <Dropdown 
             arrowIcon={false} 
             inline 
@@ -348,13 +325,13 @@ export default function Header() {
           </Dropdown>
         ) : (
           <div className="hidden md:flex items-center gap-2">
-            <Link to='/signin'>
-              <Button outline className="transition-all hover:scale-105">
+            <Link to='/sign-in'>
+              <Button  outline className="transition-all hover:scale-105">
                 Sign In
               </Button>
             </Link>
-            <Link to='/signup'>
-              <Button className="transition-all hover:scale-105">
+            <Link to='/sign-up'>
+              <Button  className="transition-all hover:scale-105">
                 Get Started
               </Button>
             </Link>
@@ -367,7 +344,7 @@ export default function Header() {
       {/* Navigation Links */}
       <NavbarCollapse className="mt-2 md:mt-0">
         <Link to='/'>
-          <NavbarLink 
+          <NavbarLink
             active={path === "/"} 
             as={'div'} 
             className='transition-colors hover:text-purple-600 dark:hover:text-purple-400 font-medium'

@@ -21,3 +21,10 @@ app.listen(5000, () => {
 });
 
 app.use("/api/auth", authRoute);
+
+
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500; // Default to 500 if no status code is set
+    const message = err.message || 'Internal Server Error'; // Default to generic error message
+    res.status(statusCode).json({ success: false, statusCode, message }); // Send error response
+  });

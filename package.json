@@ -1,0 +1,26 @@
+{
+  "name": "lmblog",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon Backend/index.js",
+    "start": "node Backend/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BossEl-566/LmBlog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BossEl-566/LmBlog/issues"
+  },
+  "homepage": "https://github.com/BossEl-566/LmBlog#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
+}

@@ -7,7 +7,7 @@ import { HiLogout, HiViewGrid, HiChevronDown, HiPlus } from "react-icons/hi";
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme } from '../redux/theme/themeSlice.js';
 import { signoutSuccess } from '../redux/user/userSlice.js';
-// import toast from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export default function Header() {
   const path = useLocation().pathname;
@@ -29,6 +29,8 @@ export default function Header() {
       setSearchTerm(searchTermFromUrl);
     }
   }, [location.search]);
+
+  console.log(theme)
 
   useEffect(() => {
     const handleClickOutside = (event) => {

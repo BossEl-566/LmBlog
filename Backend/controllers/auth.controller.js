@@ -53,3 +53,34 @@ export const signup = async (req, res, next) => {
         return next(errorHandler(500, 'Internal Server Error')); 
     }
 }
+
+export const google = async (req, res, next) => {
+    const { name, email, googlePhotoUrl } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (user) {
+            const token = jwt.sign({ id: user._id, isMember: user.isMember, isAdmin: user.isAdmin, isDeptHead: user.isDeptHead, isPastor: user.isPastor }, process.env.JWT_SECRET);
+            const { password: pass, ...rest } = user._doc;
+            return res.status(200).cookie('access_token', token, {
+                httpOnly: true
+            }).json(rest);  
+        } else {
+            const generatedPassword = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+            const newUser = new User({
+                username: name.toLowerCase().split(' ').join('') + Math.random().toString(9).slice(-4),
+                email,
+                password: hashedPassword,
+                profilePicture: googlePhotoUrl,
+            });
+            await newUser.save();
+            const token = jwt.sign({ id: newUser._id,  isAdmin: newUser.isAdmin, isAuthor: newUser.isAuthor }, process.env.JWT_SECRET);
+            const { password, ...rest } = newUser._doc;
+            return res.status(200).cookie('access_token', token, {
+                httpOnly: true
+            }).json(rest);
+        }
+    } catch (error) {
+        return next(error);
+    }
+};

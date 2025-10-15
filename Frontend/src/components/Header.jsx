@@ -1,4 +1,4 @@
-import { Avatar, Button, Dropdown, Navbar, TextInput, Badge, NavbarToggle, NavbarCollapse, NavbarLink } from 'flowbite-react';
+import { Avatar, Button, Dropdown, Navbar, TextInput, Badge, NavbarToggle, NavbarCollapse, NavbarLink, DropdownHeader, DropdownItem, DropdownDivider } from 'flowbite-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 import { AiOutlineSearch, AiOutlineClose, AiOutlineBell, AiOutlineUser } from 'react-icons/ai';
@@ -275,7 +275,7 @@ export default function Header() {
               </div>
             }
           >
-            <Dropdown.Header className='border-b border-gray-200 dark:border-gray-700 pb-3'>
+            <DropdownHeader className='border-b border-gray-200 dark:border-gray-700 pb-3'>
               <div className="flex items-center space-x-3">
                 <Avatar alt='user' img={currentUser.profilePicture} rounded size="md" />
                 <div className="flex-1 min-w-0">
@@ -286,42 +286,42 @@ export default function Header() {
                   <Badge color="purple" className="mt-1">Writer</Badge>
                 </div>
               </div>
-            </Dropdown.Header>
+            </DropdownHeader>
             
             <Link to={'/dashboard?tab=profile'}>
-              <Dropdown.Item icon={AiOutlineUser} className='hover:bg-gray-50 dark:hover:bg-gray-700'>
+              <DropdownItem icon={AiOutlineUser} className='hover:bg-gray-50 dark:hover:bg-gray-700'>
                 My Profile
-              </Dropdown.Item>
+              </DropdownItem>
             </Link>
             
             <Link to={'/dashboard?tab=posts'}>
-              <Dropdown.Item icon={HiViewGrid} className='hover:bg-gray-50 dark:hover:bg-gray-700'>
+              <DropdownItem icon={HiViewGrid} className='hover:bg-gray-50 dark:hover:bg-gray-700'>
                 My Posts
-              </Dropdown.Item>
+              </DropdownItem>
             </Link>
             
-            <Dropdown.Item 
+            <DropdownItem 
               icon={HiPlus} 
               onClick={handleCreatePost}
               className='hover:bg-gray-50 dark:hover:bg-gray-700 text-purple-600 dark:text-purple-400 font-semibold'
             >
               Create New Post
-            </Dropdown.Item>
+            </DropdownItem>
             
             <Link to={'/bookmarks'}>
-              <Dropdown.Item icon={FaRegCompass} className='hover:bg-gray-50 dark:hover:bg-gray-700'>
+              <DropdownItem icon={FaRegCompass} className='hover:bg-gray-50 dark:hover:bg-gray-700'>
                 Saved Articles
-              </Dropdown.Item>
+              </DropdownItem>
             </Link>
             
-            <Dropdown.Divider />
-            <Dropdown.Item 
+            <DropdownDivider />
+            <DropdownItem 
               icon={HiLogout} 
               onClick={handleSignout}
               className='text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 font-semibold'
             >
               Sign out
-            </Dropdown.Item>
+            </DropdownItem>
           </Dropdown>
         ) : (
           <div className="hidden md:flex items-center gap-2">

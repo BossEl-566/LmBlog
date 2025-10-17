@@ -4,8 +4,11 @@ import { useSelector } from 'react-redux';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
 import OAuth from '../components/OAuth'; // Import your OAuth component
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { signInSuccess } from '../redux/user/userSlice';
 
 export default function SignIn() {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,6 +51,7 @@ export default function SignIn() {
       if (!res.ok) {
         throw new Error(data.message || 'Something went wrong');
       }
+      dispatch(signInSuccess(data));
 
       toast.success('Signed in successfully!');
       navigate('/');

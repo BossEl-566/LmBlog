@@ -1,17 +1,20 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Eye, EyeOff, Mail, Lock, User, AlertCircle } from 'lucide-react';
 import OAuth from '../components/OAuth';
-// import toast from 'react-hot-toast';
+import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { signInSuccess } from '../redux/user/userSlice';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
+  const dispatch = useDispatch();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-//   const { theme } = useSelector(state => state.theme);
+  const { theme } = useSelector(state => state.theme);
 
   const handleChange = (e) => {
     setFormData({
@@ -59,7 +62,9 @@ export default function SignUp() {
         throw new Error(data.message || 'Something went wrong');
       }
 
-    //   toast.success('Account created successfully! Please sign in.');
+      dispatch(signInSuccess(data));
+
+      toast.success('Account created successfully! Please sign in.');
       navigate('/signin');
       
     } catch (error) {

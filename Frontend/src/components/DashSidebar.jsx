@@ -94,8 +94,8 @@ export default function DashSidebar({ isOpen, onClose }) {
             </SidebarLink>
             
             {!currentUser.isAuthor && (
-              <SidebarLink to='/dashboard?tab=join' tabValue='join'>
-                <SidebarItem active={tab === 'join'} href="#" icon={HiTable}>
+              <SidebarLink to='/dashboard?tab=blogger' tabValue='blogger'>
+                <SidebarItem active={tab === 'blogger'} href="#" icon={HiTable}>
                   Request Author
                 </SidebarItem>
               </SidebarLink>

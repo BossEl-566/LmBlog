@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser'; // ✅ Import cookie-parser
 import authRoute from './routes/auth.route.js';
 import userRoute from './routes/user.route.js';
+import requestBloggerRoute from './routes/requestblogger.controller.js';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ mongoose.connect(process.env.MONGODB)
 // ✅ Routes
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
+app.use('/api/requestblogger', requestBloggerRoute);
 
 // ✅ Error handler
 app.use((err, req, res, next) => {

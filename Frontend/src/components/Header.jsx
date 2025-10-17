@@ -59,7 +59,7 @@ export default function Header() {
       } else {
         dispatch(signoutSuccess());
         toast.success('Signed out successfully!');
-        navigate('/sign-in');
+        navigate('/signin');
       }
     } catch (error) {
       toast.error('An error occurred during sign-out. Please try again.');
@@ -87,7 +87,7 @@ export default function Header() {
     if (currentUser) {
       navigate('/create-post');
     } else {
-      navigate('/sign-in');
+      navigate('/signin');
       toast.error('Please sign in to create a post');
     }
   };
@@ -327,12 +327,12 @@ export default function Header() {
           </Dropdown>
         ) : (
           <div className="hidden md:flex items-center gap-2">
-            <Link to='/sign-in'>
+            <Link to='/signin'>
               <Button  outline className="transition-all hover:scale-105">
                 Sign In
               </Button>
             </Link>
-            <Link to='/sign-up'>
+            <Link to='/signup'>
               <Button  className="transition-all hover:scale-105">
                 Get Started
               </Button>

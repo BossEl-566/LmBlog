@@ -78,14 +78,16 @@ export default function DashSidebar({ isOpen, onClose }) {
       <Sidebar className='w-64 md:w-56'>
         <SidebarItems>
           {currentUser && currentUser.isAdmin && (
-            <Sidebar.ItemGroup className='flex flex-col gap-1'>
+            <SidebarItemGroup className='flex flex-col gap-1'>
               <SidebarLink to='/dashboard?tab=dash' tabValue='dash'>
-                <Sidebar.Item active={tab === 'dash' || !tab} href="#" icon={HiChartPie} as='div'>
+                <SidebarItem active={tab === 'dash' || !tab} href="#" icon={HiChartPie} as='div'>
                   Dashboard
-                </Sidebar.Item>
+                </SidebarItem>
               </SidebarLink>
-            </Sidebar.ItemGroup>
+            </SidebarItemGroup>
+            
           )}
+          
           <SidebarItemGroup className='flex flex-col gap-1'>
             <SidebarLink to='/dashboard?tab=profile' tabValue='profile'>
               <SidebarItem active={tab === 'profile'} href="#" icon={HiUser} label={currentUser.isAdmin ? 'Admin' : 'Author'} labelColor='dark' as='div'>
@@ -100,6 +102,16 @@ export default function DashSidebar({ isOpen, onClose }) {
                 </SidebarItem>
               </SidebarLink>
             )}
+            {currentUser && currentUser.isAdmin && (
+            <SidebarItemGroup className='flex flex-col gap-1'>
+              <SidebarLink to='/dashboard?tab=applicant' tabValue='applicant'>
+                <SidebarItem active={tab === 'applicant'} href="#" icon={HiTable} as='div'>
+                  Blogger Applications
+                
+                </SidebarItem>
+                </SidebarLink>
+            </SidebarItemGroup>
+          )}
             <SidebarItem 
               onClick={() => {
                 handleSignout();

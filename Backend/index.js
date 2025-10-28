@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser'; // ✅ Import cookie-parser
 import authRoute from './routes/auth.route.js';
 import userRoute from './routes/user.route.js';
-import requestBloggerRoute from './routes/requestblogger.controller.js';
+import requestBloggerRoute from './routes/requestblogger.route.js';
 
 dotenv.config();
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, TextInput, Textarea, Label, Select, Alert } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { User, FileText, Link, Award, Hash, Users } from 'lucide-react';
+import { User, FileText, Link, Award, Hash, Users, Mail, Phone, Globe } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function RequestBlogger() {
@@ -9,16 +9,24 @@ export default function RequestBlogger() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
+    contactEmail: '',
+    phoneNumber: '',
     bio: '',
     writingExperience: '',
-    niche: '',
+    niches: [],
     socialLinks: {
       website: '',
-      twitter: '',
+      x_formerly_twitter: '',
       linkedin: '',
-      instagram: ''
+      instagram: '',
+      medium: '',
+      tiktok: ''
     },
-    samplePostUrl: ''
+    samplePosts: [
+      { url: '', title: '', description: '' }
+    ],
+    country: '',
+    preferredLanguage: 'English'
   });
 
   const niches = [
@@ -46,6 +54,20 @@ export default function RequestBlogger() {
     'Professional (5+ years)'
   ];
 
+  const languages = [
+    'English',
+    'Spanish',
+    'French',
+    'German',
+    'Chinese',
+    'Japanese',
+    'Arabic',
+    'Hindi',
+    'Portuguese',
+    'Russian',
+    'Other'
+  ];
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     
@@ -58,6 +80,13 @@ export default function RequestBlogger() {
           [socialField]: value
         }
       }));
+    } else if (id === 'niches') {
+      // Handle multiple niche selection
+      const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+      setFormData(prev => ({
+        ...prev,
+        niches: selectedOptions
+      }));
     } else {
       setFormData(prev => ({
         ...prev,
@@ -66,17 +95,60 @@ export default function RequestBlogger() {
     }
   };
 
+  const handleSamplePostChange = (index, field, value) => {
+    const updatedSamplePosts = [...formData.samplePosts];
+    updatedSamplePosts[index] = {
+      ...updatedSamplePosts[index],
+      [field]: value
+    };
+    setFormData(prev => ({
+      ...prev,
+      samplePosts: updatedSamplePosts
+    }));
+  };
+
+  const addSamplePost = () => {
+    setFormData(prev => ({
+      ...prev,
+      samplePosts: [
+        ...prev.samplePosts,
+        { url: '', title: '', description: '' }
+      ]
+    }));
+  };
+
+  const removeSamplePost = (index) => {
+    if (formData.samplePosts.length > 1) {
+      const updatedSamplePosts = formData.samplePosts.filter((_, i) => i !== index);
+      setFormData(prev => ({
+        ...prev,
+        samplePosts: updatedSamplePosts
+      }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Validation
-    if (!formData.fullName || !formData.bio || !formData.writingExperience || !formData.niche) {
+    if (!formData.fullName || !formData.contactEmail || !formData.bio || 
+        !formData.writingExperience || formData.niches.length === 0 || !formData.country) {
       toast.error('Please fill in all required fields');
       return;
     }
 
     if (formData.bio.length < 50) {
       toast.error('Bio should be at least 50 characters long');
+      return;
+    }
+
+    // Validate sample posts
+    const hasInvalidSamplePost = formData.samplePosts.some(post => 
+      post.url && (!post.title || !post.description)
+    );
+    
+    if (hasInvalidSamplePost) {
+      toast.error('Please provide both title and description for all sample posts with URLs');
       return;
     }
 
@@ -103,16 +175,24 @@ export default function RequestBlogger() {
       // Reset form
       setFormData({
         fullName: '',
+        contactEmail: '',
+        phoneNumber: '',
         bio: '',
         writingExperience: '',
-        niche: '',
+        niches: [],
         socialLinks: {
           website: '',
-          twitter: '',
+          x_formerly_twitter: '',
           linkedin: '',
-          instagram: ''
+          instagram: '',
+          medium: '',
+          tiktok: ''
         },
-        samplePostUrl: ''
+        samplePosts: [
+          { url: '', title: '', description: '' }
+        ],
+        country: '',
+        preferredLanguage: 'English'
       });
 
     } catch (error) {
@@ -207,53 +287,120 @@ export default function RequestBlogger() {
               </div>
               
               <div>
-                <Label htmlFor="niche" value="Primary Niche *" />
-                <Select
-                  id="niche"
-                  value={formData.niche}
+                <Label htmlFor="contactEmail" value="Contact Email *" />
+                <TextInput
+                  id="contactEmail"
+                  type="email"
+                  value={formData.contactEmail}
                   onChange={handleChange}
+                  placeholder="your.email@example.com"
+                  icon={Mail}
                   required
-                >
-                  <option value="">Select your niche</option>
-                  {niches.map(niche => (
-                    <option key={niche} value={niche}>{niche}</option>
-                  ))}
-                </Select>
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="phoneNumber" value="Phone Number" />
+                <TextInput
+                  id="phoneNumber"
+                  type="tel"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  placeholder="+1 (555) 123-4567"
+                  icon={Phone}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="country" value="Country *" />
+                <TextInput
+                  id="country"
+                  type="text"
+                  value={formData.country}
+                  onChange={handleChange}
+                  placeholder="Your country of residence"
+                  required
+                />
               </div>
             </div>
           </div>
 
-          {/* Bio */}
+          {/* Content & Expertise */}
           <div>
-            <Label htmlFor="bio" value="About You & Writing Style *" />
-            <Textarea
-              id="bio"
-              value={formData.bio}
-              onChange={handleChange}
-              placeholder="Tell us about yourself, your writing style, and what makes your perspective unique. (Minimum 50 characters)"
-              rows={4}
-              required
-            />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>{formData.bio.length}/50 characters minimum</span>
-              <span>{formData.bio.length} characters</span>
+            <div className="flex items-center gap-2 mb-4">
+              <FileText className="w-5 h-5 text-blue-600" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Content & Expertise
+              </h3>
             </div>
-          </div>
 
-          {/* Writing Experience */}
-          <div>
-            <Label htmlFor="writingExperience" value="Writing Experience *" />
-            <Select
-              id="writingExperience"
-              value={formData.writingExperience}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select your experience level</option>
-              {experienceLevels.map(level => (
-                <option key={level} value={level}>{level}</option>
-              ))}
-            </Select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <Label htmlFor="niches" value="Niches *" />
+                <Select
+                  id="niches"
+                  multiple
+                  value={formData.niches}
+                  onChange={handleChange}
+                  required
+                  helperText="Hold Ctrl/Cmd to select multiple niches"
+                >
+                  {niches.map(niche => (
+                    <option key={niche} value={niche}>{niche}</option>
+                  ))}
+                </Select>
+                <div className="text-xs text-gray-500 mt-1">
+                  Selected: {formData.niches.join(', ') || 'None'}
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="preferredLanguage" value="Preferred Language *" />
+                <Select
+                  id="preferredLanguage"
+                  value={formData.preferredLanguage}
+                  onChange={handleChange}
+                  required
+                >
+                  {languages.map(language => (
+                    <option key={language} value={language}>{language}</option>
+                  ))}
+                </Select>
+              </div>
+            </div>
+
+            {/* Bio */}
+            <div className="mb-4">
+              <Label htmlFor="bio" value="About You & Writing Style *" />
+              <Textarea
+                id="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                placeholder="Tell us about yourself, your writing style, and what makes your perspective unique. (Minimum 50 characters, maximum 500)"
+                rows={4}
+                required
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>{formData.bio.length}/50 characters minimum</span>
+                <span>{formData.bio.length}/500 characters</span>
+              </div>
+            </div>
+
+            {/* Writing Experience */}
+            <div>
+              <Label htmlFor="writingExperience" value="Writing Experience *" />
+              <Select
+                id="writingExperience"
+                value={formData.writingExperience}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select your experience level</option>
+                {experienceLevels.map(level => (
+                  <option key={level} value={level}>{level}</option>
+                ))}
+              </Select>
+            </div>
           </div>
 
           {/* Social Links */}
@@ -274,15 +421,16 @@ export default function RequestBlogger() {
                   value={formData.socialLinks.website}
                   onChange={handleChange}
                   placeholder="https://yourblog.com"
+                  icon={Globe}
                 />
               </div>
               
               <div>
-                <Label htmlFor="social.twitter" value="Twitter/X" />
+                <Label htmlFor="social.x_formerly_twitter" value="Twitter/X" />
                 <TextInput
-                  id="social.twitter"
+                  id="social.x_formerly_twitter"
                   type="url"
-                  value={formData.socialLinks.twitter}
+                  value={formData.socialLinks.x_formerly_twitter}
                   onChange={handleChange}
                   placeholder="https://twitter.com/username"
                 />
@@ -309,20 +457,99 @@ export default function RequestBlogger() {
                   placeholder="https://instagram.com/username"
                 />
               </div>
+
+              <div>
+                <Label htmlFor="social.medium" value="Medium" />
+                <TextInput
+                  id="social.medium"
+                  type="url"
+                  value={formData.socialLinks.medium}
+                  onChange={handleChange}
+                  placeholder="https://medium.com/@username"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="social.tiktok" value="TikTok" />
+                <TextInput
+                  id="social.tiktok"
+                  type="url"
+                  value={formData.socialLinks.tiktok}
+                  onChange={handleChange}
+                  placeholder="https://tiktok.com/@username"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Sample Work */}
+          {/* Sample Posts */}
           <div>
-            <Label htmlFor="samplePostUrl" value="Sample Work (Optional)" />
-            <TextInput
-              id="samplePostUrl"
-              type="url"
-              value={formData.samplePostUrl}
-              onChange={handleChange}
-              placeholder="https://example.com/your-sample-post"
-              helperText="Link to your best work or a writing sample"
-            />
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <FileText className="w-5 h-5 text-blue-600" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Sample Posts
+                </h3>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                gradientDuoTone="greenToBlue"
+                onClick={addSamplePost}
+              >
+                Add Another Sample
+              </Button>
+            </div>
+
+            <div className="space-y-4">
+              {formData.samplePosts.map((post, index) => (
+                <Card key={index} className="relative">
+                  {formData.samplePosts.length > 1 && (
+                    <Button
+                      type="button"
+                      size="xs"
+                      color="red"
+                      className="absolute top-2 right-2"
+                      onClick={() => removeSamplePost(index)}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                  <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <Label htmlFor={`sample-url-${index}`} value="Post URL" />
+                      <TextInput
+                        id={`sample-url-${index}`}
+                        type="url"
+                        value={post.url}
+                        onChange={(e) => handleSamplePostChange(index, 'url', e.target.value)}
+                        placeholder="https://example.com/your-sample-post"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`sample-title-${index}`} value="Post Title" />
+                      <TextInput
+                        id={`sample-title-${index}`}
+                        type="text"
+                        value={post.title}
+                        onChange={(e) => handleSamplePostChange(index, 'title', e.target.value)}
+                        placeholder="Title of your sample post"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`sample-description-${index}`} value="Post Description" />
+                      <Textarea
+                        id={`sample-description-${index}`}
+                        value={post.description}
+                        onChange={(e) => handleSamplePostChange(index, 'description', e.target.value)}
+                        placeholder="Brief description of this sample post"
+                        rows={2}
+                      />
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
 
           {/* Application Tips */}
@@ -330,10 +557,11 @@ export default function RequestBlogger() {
             <div className="text-sm">
               <span className="font-semibold">Tips for a successful application:</span>
               <ul className="mt-2 space-y-1">
-                <li>• Write a compelling bio that showcases your unique voice</li>
-                <li>• Choose a niche you're passionate and knowledgeable about</li>
+                <li>• Write a compelling bio that showcases your unique voice (50-500 characters)</li>
+                <li>• Select relevant niches you're passionate and knowledgeable about</li>
                 <li>• Include relevant social media profiles to showcase your online presence</li>
-                <li>• Provide a writing sample if available</li>
+                <li>• Provide sample posts with titles and descriptions to showcase your best work</li>
+                <li>• Ensure your contact email is correct for communication</li>
               </ul>
             </div>
           </Alert>
@@ -383,7 +611,13 @@ export default function RequestBlogger() {
           <div>
             <h4 className="font-semibold text-gray-900 dark:text-white">Can I write about multiple topics?</h4>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Yes! While we ask for your primary niche, you're welcome to write about various topics that interest you.
+              Yes! You can select multiple niches that interest you and write about various topics within those areas.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-semibold text-gray-900 dark:text-white">What happens after I submit my application?</h4>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              Our team will review your application and may contact you via the email provided if we need additional information.
             </p>
           </div>
         </div>

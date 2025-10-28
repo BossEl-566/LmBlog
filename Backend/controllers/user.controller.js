@@ -58,5 +58,23 @@ export const signout = (req, res, next) => {
       }
      };
 
+     export const updateAuthor = async (req, res, next) => {
+      if (req.user.id !== req.params.userId && !req.user.isAdmin) {
+        return next(errorHandler(403, 'You are not authorized to perform this action'));
+      }
+        try {
+          const updatedUser = await User.findByIdAndUpdate(req.params.userId, {
+            $set: {
+                isAuthor: req.body.isAuthor,
+            },
+          }, { new: true });
+          const { password, ...rest } = updatedUser._doc;
+          res.status(200).json(rest); 
+        }
+        catch (error) {
+            next(error);
+        }
+        }
+
 
 

@@ -85,7 +85,7 @@ export default function Header() {
 
   const handleCreatePost = () => {
     if (currentUser) {
-      navigate('/create-post');
+      navigate('/dashboard?tab=newpost');
     } else {
       navigate('/signin');
       toast.error('Please sign in to create a post');
@@ -296,7 +296,7 @@ export default function Header() {
               </DropdownItem>
             </Link>
             
-            <Link to={'/dashboard?tab=posts'}>
+            <Link to={'/dashboard?tab=post'}>
               <DropdownItem icon={HiViewGrid} className='hover:bg-gray-50 dark:hover:bg-gray-700'>
                 My Posts
               </DropdownItem>

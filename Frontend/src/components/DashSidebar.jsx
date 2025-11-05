@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Sidebar, SidebarItem, SidebarItemGroup, SidebarItems } from "flowbite-react";
-import { HiArrowSmRight, HiTable, HiUser, HiAnnotation, HiChartPie, } from "react-icons/hi";
+import { HiArrowSmRight, HiTable, HiUser, HiChartPie, HiDocumentText } from "react-icons/hi";
 import { useSelector } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { Link, useLocation } from 'react-router-dom';
@@ -94,6 +94,11 @@ export default function DashSidebar({ isOpen, onClose }) {
                 Profile
               </SidebarItem>
             </SidebarLink>
+            <SidebarLink to='/dashboard?tab=post' tabValue='post'>
+                <SidebarItem active={tab === 'post'} href="#" icon={HiDocumentText}>
+                  Post
+                </SidebarItem>
+              </SidebarLink>
             
             {!currentUser.isAuthor && (
               <SidebarLink to='/dashboard?tab=blogger' tabValue='blogger'>

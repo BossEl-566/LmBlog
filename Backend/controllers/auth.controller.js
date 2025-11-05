@@ -59,7 +59,7 @@ export const google = async (req, res, next) => {
     try {
         const user = await User.findOne({ email });
         if (user) {
-            const token = jwt.sign({ id: user._id, isMember: user.isMember, isAdmin: user.isAdmin, isDeptHead: user.isDeptHead, isPastor: user.isPastor }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: user._id, isAuthor: user.isAuthor, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
             const { password: pass, ...rest } = user._doc;
             return res.status(200).cookie('access_token', token, {
                 httpOnly: true

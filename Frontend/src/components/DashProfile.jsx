@@ -5,6 +5,7 @@ import { Client, Storage } from 'appwrite';
 import { updateStart, updateSuccess, updateFailure, signoutSuccess } from '../redux/user/userSlice';
 import { Eye, EyeOff, Calendar, FileText, Users, TrendingUp, Edit3, Bookmark, Settings, Bell, Shield } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 export default function DashProfile() {
   const { currentUser, loading } = useSelector(state => state.user);
@@ -166,10 +167,12 @@ export default function DashProfile() {
             Manage your profile, content, and audience engagement
           </p>
         </div>
-        <Button gradientDuoTone="purpleToBlue" className="flex items-center gap-2">
+        <Link to="/dashboard?tab=newpost">
+        <Button  className="flex items-center gap-2">
           <Edit3 size={16} />
           Write New Post
         </Button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

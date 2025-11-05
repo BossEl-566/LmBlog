@@ -4,6 +4,8 @@ import DashSidebar from '../components/DashSidebar';
 import DashProfile from '../components/DashProfile';
 import DashRequestBlogger from '../components/DashRequestBlogger'
 import DashApplicant from '../components/DashApplicant';
+import DashPost from '../components/DashPost';
+import NewPost from '../components/NewPost';
 
 
 export default function Dashboard() {
@@ -57,6 +59,8 @@ export default function Dashboard() {
         {tab === 'profile' && <DashProfile />}
         {tab === 'blogger' && <DashRequestBlogger />}
         {tab === 'applicant' && <DashApplicant />}
+        {tab === 'post' &&  <DashPost />}
+        {(tab === 'newpost' && <NewPost />) }
   
       </div>
     </div>

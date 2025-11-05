@@ -57,3 +57,36 @@ export const getAllPosts = async (req, res, next) => {
       next(error);
     }
     };
+
+export const getAllAuthorPosts = async (req, res, next) => {
+  if (!req.user.isAdmin && req.user.id !== req.params.authorId) {
+    return next(errorHandler(403, 'You are not authorized to perform this action'));
+  }
+    try {
+        const posts = await Post.find({ author: req.params.authorId })
+        .populate('author', 'username email profilePicture')
+        .populate('category', 'name slug')
+        .sort({ createdAt: -1 });
+      res.status(200).json(posts);
+    }
+    catch (error) {
+        next(error);
+    }
+    };
+
+export const deletePost = async (req, res, next) => {
+  if (!req.user.isAdmin && !req.user.isAuthor) {
+    return next(errorHandler(403, 'You are not authorized to perform this action'));
+  }
+    try {
+        const post = await Post.findById(req.params.postId);
+        if (!post) {
+            return next(errorHandler(404, 'Post not found'));
+        }   
+        await Post.findByIdAndDelete(req.params.postId);
+        res.status(200).json({ message: 'Post deleted successfully' });
+    }
+    catch (error) {
+        next(error);
+    }
+    };

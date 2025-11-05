@@ -42,3 +42,18 @@ const newPost = new Post({
     next(error);
   }
 };
+
+export const getAllPosts = async (req, res, next) => {
+    if (!req.user.isAdmin && !req.user.isAuthor) {
+      return next(errorHandler(403, 'You are not authorized to perform this action'));
+    }
+    try {
+      const posts = await Post.find()
+        .populate('author', 'username email profilePicture')
+        .populate('category', 'name slug')
+        .sort({ createdAt: -1 });
+      res.status(200).json(posts);
+    } catch (error) {
+      next(error);
+    }
+    };

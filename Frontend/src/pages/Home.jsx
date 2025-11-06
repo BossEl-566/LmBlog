@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Badge, Spinner, Carousel, Tabs, Modal } from 'flowbite-react';
+import { Card, Button, Badge, Spinner, Carousel, Tabs, Modal, ModalHeader, ModalBody } from 'flowbite-react';
 import { 
   Clock, 
   Eye, 
@@ -550,13 +550,13 @@ const HomePage = () => {
 
       {/* Search Modal */}
       <Modal show={showSearchModal} onClose={() => setShowSearchModal(false)} size="4xl">
-        <Modal.Header>
+        <ModalHeader>
           <div className="flex items-center gap-2">
             <Search size={20} />
             Search Articles
           </div>
-        </Modal.Header>
-        <Modal.Body>
+        </ModalHeader>
+        <ModalBody>
           <div className="space-y-4">
             <input
               type="text"
@@ -572,7 +572,7 @@ const HomePage = () => {
               ))}
             </div>
           </div>
-        </Modal.Body>
+        </ModalBody>
       </Modal>
     </div>
   );

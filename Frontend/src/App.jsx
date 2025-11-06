@@ -10,6 +10,8 @@ import Footer from './components/Footer';
 import Signin from './pages/Signin';
 import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './pages/Dashboard';
+import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
+import EditPost from './pages/EditPost';
 
 export default function App() {
   return (
@@ -24,6 +26,11 @@ export default function App() {
         <Route element={<PrivateRoute />}>
 
           <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+        <Route element={<OnlyAdminPrivateRoute />}>
+          
+          <Route path="/edit-post/:postId" element={<EditPost />} />
+          
         </Route>
       </Routes>
       <Footer/>

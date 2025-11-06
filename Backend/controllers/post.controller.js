@@ -90,3 +90,39 @@ export const deletePost = async (req, res, next) => {
         next(error);
     }
     };
+
+
+export const editpost = async (req, res, next) => {
+  if (!req.user.isAdmin && !req.user.isAuthor) {
+    return next(errorHandler(403, 'You are not authorized to perform this action'));
+  }
+    try {
+        const post = await Post.findById(req.params.postId);
+        if (!post) {
+            return next(errorHandler(404, 'Post not found'));
+        }
+        const updatedPost = await Post.findByIdAndUpdate(req.params.postId, {
+            $set: req.body,
+        }, { new: true });
+        res.status(200).json(updatedPost);
+    }
+    catch (error) {
+        next(error);
+    }
+    };
+
+export const getPostById = async (req, res, next) => {
+  if (!req.user.isAdmin && !req.user.isAuthor) {
+    return next(errorHandler(403, 'You are not authorized to perform this action'));
+  }
+    try {
+        const post = await Post.findById(req.params.postId) 
+        if (!post) {
+            return next(errorHandler(404, 'Post not found'));
+        }
+        res.status(200).json(post);
+    }
+    catch (error) {
+        next(error);
+    }
+    };

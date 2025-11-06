@@ -119,7 +119,7 @@ export default function PostsManagement() {
 
   const handleViewPost = (post) => {
     if (post.status === 'published' && post.slug) {
-      window.open(`/posts/${post.slug}`, '_blank');
+      window.open(`/post/${post.slug}`, '_blank');
     } else {
       toast.error('This post is not published yet');
     }

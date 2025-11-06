@@ -145,3 +145,14 @@ export const publishPost = async (req, res, next) => {
         next(error);
     }
     };
+
+export const getPublishedPosts = async (req, res, next) => {
+    try {
+        const posts = await Post.find({ status: 'published' })
+        .sort({ publishedAt: -1 });
+      res.status(200).json(posts);
+    }
+    catch (error) {
+        next(error);
+    }
+    };

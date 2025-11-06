@@ -126,3 +126,22 @@ export const getPostById = async (req, res, next) => {
         next(error);
     }
     };
+
+export const publishPost = async (req, res, next) => {
+  if (!req.user.isAdmin && !req.user.isAuthor) {
+    return next(errorHandler(403, 'You are not authorized to perform this action'));
+  }
+    try {
+        const post = await Post.findById(req.params.postId);
+        if (!post) {
+            return next(errorHandler(404, 'Post not found'));
+        }
+        post.status = 'published';
+        post.publishedAt = new Date();
+        const publishedPost = await post.save();
+        res.status(200).json(publishedPost);
+    }
+    catch (error) {
+        next(error);
+    }
+    };

@@ -225,7 +225,7 @@ export default function PostsManagement() {
           </p>
         </div>
         <Button
-          onClick={() => navigate('/create-post')}
+          onClick={() => navigate('/dashboard?tab=newpost')}
         >
           Create New Post
         </Button>

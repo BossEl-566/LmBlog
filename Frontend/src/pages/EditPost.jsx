@@ -556,7 +556,7 @@ export default function EditPost() {
         ...(isPublishing && { publishedAt: new Date().toISOString() })
       };
 
-      const response = await fetch(`/api/post/author/${postId}`, {
+      const response = await fetch(`/api/post/publish/${postId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

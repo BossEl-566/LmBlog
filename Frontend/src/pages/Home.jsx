@@ -248,10 +248,6 @@ const HomePage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <Badge color="blue" className="mb-4 mx-auto">
-                <Zap size={14} className="mr-1" />
-                Welcome to Our Blog
-              </Badge>
               
               <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6">
                 Discover{' '}

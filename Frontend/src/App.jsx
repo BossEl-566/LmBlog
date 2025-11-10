@@ -12,6 +12,17 @@ import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './pages/Dashboard';
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import EditPost from './pages/EditPost';
+import Trending from './pages/Trending';
+import News from './pages/News';
+import Entertainment from './pages/Entertainment';
+import Sports from './pages/Sports';
+import Technology from './pages/Technology';
+import Lifestyle from './pages/Lifestyle';
+import Travel from './pages/Travel';
+import Health from './pages/Health';
+import Business from './pages/Business';
+import Food from './pages/Food';
+import Science from './pages/Science';
 
 export default function App() {
   return (
@@ -23,6 +34,17 @@ export default function App() {
         <Route path='/contact' element={<Contact/>} />
         <Route path='/signup' element={<Signup/>} />
         <Route path='/signin' element={<Signin/>} />
+        <Route path='/trending' element={<Trending/>} />
+        <Route path="/news" element={<News/>} />
+        <Route path="/sports" element={<Sports/>} />
+        <Route path="/entertainment" element={<Entertainment/>} />
+        <Route path="/category/technology" element={<Technology/>} />
+        <Route path="/category/lifestyle" element={<Lifestyle/>} />
+        <Route path="/category/travel" element={<Travel/>} />
+        <Route path='/category/health' element={<Health/>} />
+        <Route path="/category/business" element={<Business/>} />
+        <Route path="/category/food" element={<Food/>} />
+        <Route path="/category/science" element={<Science/>} />
         <Route element={<PrivateRoute />}>
 
           <Route path="/dashboard" element={<Dashboard />} />
